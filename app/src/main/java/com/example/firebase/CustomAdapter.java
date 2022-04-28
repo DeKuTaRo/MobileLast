@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +41,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.placeEvent.setText(noteItem.getPlace());
         holder.dateEvent.setText(noteItem.getDate());
         holder.timeEvent.setText(noteItem.getTime());
+        holder.updateBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(context, UpdateActivity.class);
+            activity.startActivityForResult(intent, 1);
+//            Toast.makeText(context, holder.nameEvent.getText().toString(), Toast.LENGTH_SHORT).show();
+        });
 
-//        holder.mainCardView.setOnClickListener(view -> {
-//            Intent i = new Intent(context, UpdateActivity.class);
-//            activity.startActivity(i);
-//        });
     }
 
     @Override
@@ -53,11 +54,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameEvent, placeEvent, dateEvent, timeEvent;
-        LinearLayout mainLayout;
         CardView mainCardView;
+        Button updateBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,15 +67,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             placeEvent = itemView.findViewById(R.id.placeEvent);
             dateEvent = itemView.findViewById(R.id.dateEvent);
             timeEvent = itemView.findViewById(R.id.timeEvent);
-
+            updateBtn = itemView.findViewById(R.id.updateBtn);
             mainCardView = itemView.findViewById(R.id.mainCardView);
 
-
-//            itemView.setOnLongClickListener(view -> {
-//                Intent i = new Intent(context, UpdateActivity.class);
-//                activity.startActivity(i);
-//                return true;
-//            });
 
         }
     }

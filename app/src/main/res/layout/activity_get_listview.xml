@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,6 +9,7 @@
     android:id="@+id/mainCardView">
 
     <LinearLayout
+        android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -65,20 +65,14 @@
             android:orientation="vertical"
             android:layout_gravity="center">
 
-            <Switch
-                android:layout_gravity="center"
-                android:layout_weight="1"
+            <Button
+                android:id="@+id/updateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-            <TextView
-                android:id="@+id/idEvent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2sp"
-                android:layout_marginTop="2sp"
-                android:layout_gravity="center"/>
+                android:text="UPDATE"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
 
         </LinearLayout>
 
