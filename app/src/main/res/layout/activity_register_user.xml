@@ -73,6 +73,17 @@
         android:layout_marginEnd="15sp"
         android:inputType="textPassword"/>
 
+    <EditText
+        android:id="@+id/password_input_rewrite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter password again"
+        android:textSize="18sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="15sp"
+        android:layout_marginEnd="15sp"
+        android:inputType="textPassword"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -20,7 +19,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     Context context;
     ArrayList<NoteItem> list;
-    Activity activity;
 
     public CustomAdapter(Context context, ArrayList<NoteItem> list) {
         this.context = context;
@@ -41,9 +39,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.placeEvent.setText(noteItem.getPlace());
         holder.dateEvent.setText(noteItem.getDate());
         holder.timeEvent.setText(noteItem.getTime());
-        holder.updateBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(context, UpdateActivity.class);
-            activity.startActivityForResult(intent, 1);
+        holder.mainCardView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), UpdateActivity.class);
+            intent.putExtra("name", String.valueOf(noteItem.getName()));
+            intent.putExtra("place", String.valueOf(noteItem.getPlace()));
+            intent.putExtra("date", String.valueOf(noteItem.getDate()));
+            intent.putExtra("time", String.valueOf(noteItem.getTime()));
+
+            view.getContext().startActivity(intent);
 //            Toast.makeText(context, holder.nameEvent.getText().toString(), Toast.LENGTH_SHORT).show();
         });
 

@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NoteActivity extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class NoteActivity extends AppCompatActivity {
     TextView textViewNoData;
 
     private FirebaseAuth mAuth;
+    private String userID;
 
     DatabaseReference databaseReference;
     ArrayList<NoteItem> list;
@@ -45,7 +47,8 @@ public class NoteActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         recyclerView = findViewById(R.id.recycleView);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("NoteItems");
+        userID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("NoteItems");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

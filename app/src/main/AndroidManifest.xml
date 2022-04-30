@@ -12,7 +12,10 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".UpdateActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Update Note"
+            android:parentActivityName=".NoteActivity"
+            android:theme="@style/Theme.Design.Light"/>
         <activity
             android:name=".AddNoteActivity"
             android:exported="false"

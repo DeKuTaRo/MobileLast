@@ -1,5 +1,7 @@
 package com.example.firebase;
 
+import static java.util.Objects.requireNonNull;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +27,7 @@ import java.util.Objects;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener{
 
-    private EditText fullName_input, age_input, email_input, password_input;
+    private EditText fullName_input, age_input, email_input, password_input, password_input_rewrite;
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
@@ -58,6 +60,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         age_input = findViewById(R.id.age_input);
         email_input = findViewById(R.id.email_input);
         password_input = findViewById(R.id.password_input);
+        password_input_rewrite= findViewById(R.id.password_input_rewrite);
 
         progressBar = findViewById(R.id.progressBar);
     }
@@ -80,6 +83,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String ageValue = age_input.getText().toString().trim();
         String emailValue = email_input.getText().toString().trim();
         String passwordValue = password_input.getText().toString().trim();
+        String passwordRewrite = password_input_rewrite.getText().toString().trim();
 
         if (fullNameValue.isEmpty()) {
             fullName_input.setError("Full name is required");
@@ -119,6 +123,11 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        if (!passwordRewrite.equals(passwordValue)) {
+            password_input_rewrite.setError("The password must be the same");
+            password_input_rewrite.requestFocus();
+            return;
+        }
 
         progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(emailValue, passwordValue)
@@ -128,12 +137,14 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         User user = new User(fullNameValue, ageValue, emailValue);
 
                         FirebaseDatabase.getInstance().getReference("Users")
-                                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
-                                .setValue(user).addOnCompleteListener(task1 -> {
+                                .child(requireNonNull(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()))
+                                .setValue(user)
+                                .addOnCompleteListener(task1 -> {
 
                                     if (task1.isSuccessful()) {
                                         Toast.makeText(RegisterUser.this, "User has been register successfully", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.VISIBLE);
+                                        startActivity(new Intent(RegisterUser.this, MainActivity.class));
                                     } else {
                                         Toast.makeText(RegisterUser.this, "Failed to register ! Try again !", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);

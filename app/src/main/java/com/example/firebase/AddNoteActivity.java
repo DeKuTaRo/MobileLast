@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class AddNoteActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -28,9 +29,11 @@ public class AddNoteActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressBar progressBar;
     private Button addBtn;
 
+    private FirebaseAuth mAuth;
     private FirebaseDatabase rootNode;
     DatabaseReference reference;
 
+    private String userID;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class AddNoteActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_add_note);
 
         progressBar = findViewById(R.id.progressBar);
+
+        mAuth = FirebaseAuth.getInstance();
 
         nameEvent = findViewById(R.id.nameEvent);
         placeEvent = findViewById(R.id.placeEvent);
@@ -156,10 +161,10 @@ public class AddNoteActivity extends AppCompatActivity implements View.OnClickLi
             return;
         }
 
-
+        userID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         progressBar.setVisibility(View.VISIBLE);
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference().child("NoteItems");
+        reference = rootNode.getReference("Users").child(userID).child("NoteItems");
 
         NoteItem noteItem = new NoteItem(nameValue, placeValue, dateValue, timeValue);
 
