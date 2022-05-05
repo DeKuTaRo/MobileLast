@@ -1,4 +1,4 @@
-package com.example.firebase;
+package com.example.firebase.PostLoginActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.firebase.Models.NoteItem;
+import com.example.firebase.R;
+import com.example.firebase.databinding.ActivityNoteBinding;
+import com.example.firebase.databinding.ActivityUpdateBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +27,8 @@ import java.util.Objects;
 
 public class UpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private ActivityUpdateBinding binding;
+
     private EditText nameEventUpdate, placeEventUpdate, dateEventUpdate, timeEventUpdate;
     private Button updateBtn, deleteBtn;
     DatabaseReference reference;
@@ -37,7 +41,9 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update);
+        this.binding = ActivityUpdateBinding.inflate(getLayoutInflater());
+        View viewRoot = this.binding.getRoot();
+        setContentView(viewRoot);
 
         nameEventUpdate = findViewById(R.id.nameEventUpdate);
         placeEventUpdate = findViewById(R.id.placeEventUpdate);
@@ -54,10 +60,10 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
                 NoteItem noteItem = snapshot.getValue(NoteItem.class);
 
                 if (noteItem != null) {
-                    String name = noteItem.name;
-                    String place = noteItem.place;
-                    String date = noteItem.date;
-                    String time = noteItem.time;
+                    String name = noteItem.getName();
+                    String place = noteItem.getPlace();
+                    String date = noteItem.getDate();
+                    String time = noteItem.getTime();
 
                     nameEventUpdate.setText(name);
                     placeEventUpdate.setText(place);

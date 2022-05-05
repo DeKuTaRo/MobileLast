@@ -1,7 +1,8 @@
-package com.example.firebase;
+package com.example.firebase.PostLoginActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,10 +12,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
+import com.example.firebase.CustomAdapter.CustomAdapter;
+import com.example.firebase.Models.NoteItem;
+import com.example.firebase.R;
+import com.example.firebase.databinding.ActivityNoteBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,50 +27,47 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class NoteActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-
-    ImageView empty_icon;
-    TextView textViewNoData;
+    private ActivityNoteBinding binding;
 
     private FirebaseAuth mAuth;
     private String userID;
+    private DatabaseReference databaseReference;
 
-    DatabaseReference databaseReference;
-    ArrayList<NoteItem> list;
-    CustomAdapter customAdapter;
+    // RecyclerView
+    private List<NoteItem> list_NoteItem;
+    private CustomAdapter customAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note);
+        this.binding = ActivityNoteBinding.inflate(getLayoutInflater());
+        View viewRoot = this.binding.getRoot();
+        setContentView(viewRoot);
 
-        mAuth = FirebaseAuth.getInstance();
+        Initialize();
+        DatabaseSetup();
+        SetupRecyclerView();
+    }
 
-        recyclerView = findViewById(R.id.recycleView);
-        userID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("NoteItems");
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void DatabaseSetup() {
+        this.mAuth = FirebaseAuth.getInstance();
+        this.userID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        this.databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("NoteItems");
 
-        empty_icon = findViewById(R.id.empty_icon);
-        textViewNoData = findViewById(R.id.textViewNoData);
-
-        list = new ArrayList<>();
-        customAdapter = new CustomAdapter(this, list);
-        recyclerView.setAdapter(customAdapter);
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        this.databaseReference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     NoteItem noteItem = dataSnapshot.getValue(NoteItem.class);
-                    list.add(noteItem);
+                    list_NoteItem.add(noteItem);
                 }
 
                 customAdapter.notifyDataSetChanged();
@@ -80,6 +81,19 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
+    private void SetupRecyclerView() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+
+        this.binding.recycleViewNoteItem.setLayoutManager(layoutManager);
+        this.binding.recycleViewNoteItem.setHasFixedSize(true);
+        this.binding.recycleViewNoteItem.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        this.binding.recycleViewNoteItem.setAdapter(this.customAdapter);
+    }
+
+    private void Initialize() {
+        this.list_NoteItem = new ArrayList<>();
+        this.customAdapter = new CustomAdapter(this, this.list_NoteItem);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

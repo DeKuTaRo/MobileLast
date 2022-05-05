@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".MainActivity">
+    tools:context=".ReLoginActivity.MainActivity">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
+        android:id="@+id/recycleView_NoteItem"
         android:layout_width="409dp"
         android:layout_height="730dp"
         android:layout_marginTop="15dp"

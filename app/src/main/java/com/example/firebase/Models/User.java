@@ -1,8 +1,8 @@
-package com.example.firebase;
+package com.example.firebase.Models;
 
 public class User {
 
-    public String fullName, age, email;
+    private String fullName, age, email;
 
     public User() {
 

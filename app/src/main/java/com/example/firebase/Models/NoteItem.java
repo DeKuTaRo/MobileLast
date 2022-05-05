@@ -1,8 +1,8 @@
-package com.example.firebase;
+package com.example.firebase.Models;
 
 public class NoteItem {
 
-    String name, place, date, time;
+    private String name, place, date, time;
 
     public NoteItem() {
 

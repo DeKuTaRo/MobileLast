@@ -1,47 +1,42 @@
-package com.example.firebase;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.firebase.ReLoginActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.firebase.PostLoginActivity.NoteActivity;
+import com.example.firebase.R;
+import com.example.firebase.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button register, forgotPassword;
-    private EditText emailEditText, passwordEditText;
-    private Button loginBtn;
+    private ActivityMainBinding binding;
+
     private FirebaseAuth mAuth;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        this.binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View viewRoot = this.binding.getRoot();
+        setContentView(viewRoot);
 
-        mAuth = FirebaseAuth.getInstance();
+        Initialize();
+    }
 
-        register = findViewById(R.id.register);
-        register.setOnClickListener(this);
+    private void Initialize() {
+        this.mAuth = FirebaseAuth.getInstance();
 
-        forgotPassword = findViewById(R.id.forgotPassword);
-        forgotPassword.setOnClickListener(this);
-
-        loginBtn = findViewById(R.id.loginBtn);
-        loginBtn.setOnClickListener(this);
-
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-
-        progressBar = findViewById(R.id.progressBar);
+        this.binding.register.setOnClickListener(this);
+        this.binding.register.setOnClickListener(this);
+        this.binding.register.setOnClickListener(this);
     }
 
 
@@ -50,54 +45,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register:
-                Intent i = new Intent(this, RegisterUser.class);
-                startActivity(i);
+                Intent intent_Register = new Intent(this, RegisterUser.class);
+                startActivity(intent_Register);
                 break;
             case R.id.loginBtn:
                 userLogin();
                 break;
             case R.id.forgotPassword :
-                startActivity(new Intent(this, ForgotPassword.class));
+                Intent intent_ForgotPassword = new Intent(this, ForgotPassword.class);
+                startActivity(intent_ForgotPassword);
+                break;
+            default:
+                // Toast Error Message
                 break;
         }
 
     }
 
     private void userLogin() {
-        String email = emailEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
+        String email = this.binding.emailEditText.getText().toString().trim();
+        String password = this.binding.passwordEditText.getText().toString().trim();
 
         if (email.isEmpty()) {
-            emailEditText.setError("Email is required");
-            emailEditText.requestFocus();
+            this.binding.emailEditText.setError("Email is required");
+            this.binding.emailEditText.requestFocus();
             return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailEditText.setError("Please enter a valid email");
-            emailEditText.requestFocus();
+            this.binding.emailEditText.setError("Please enter a valid email");
+            this.binding.emailEditText.requestFocus();
             return;
         }
 
         if (password.isEmpty()) {
-            passwordEditText.setError("Password is required");
-            passwordEditText.requestFocus();
+            this.binding.passwordEditText.setError("Password is required");
+            this.binding.passwordEditText.requestFocus();
             return;
         }
 
         if (password.length() < 6) {
-            passwordEditText.setError("Password must be at least 6 characters");
-            passwordEditText.requestFocus();
+            this.binding.passwordEditText.setError("Password must be at least 6 characters");
+            this.binding.passwordEditText.requestFocus();
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        this.binding.progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-
                     if (task.isSuccessful()) {
-
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         assert user != null;
                         if (user.isEmailVerified()) {
@@ -106,9 +103,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         } else {
                             user.sendEmailVerification();
                             Toast.makeText(MainActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
+                            this.binding.progressBar.setVisibility(View.GONE);
                         }
                     } else {
                         Toast.makeText(MainActivity.this, "Failed to login ! Please check your credentials", Toast.LENGTH_SHORT).show();
+                        this.binding.progressBar.setVisibility(View.GONE);
                     }
                 });
     }

@@ -1,31 +1,28 @@
-package com.example.firebase;
+package com.example.firebase.ReLoginActivity;
 
 import static java.util.Objects.requireNonNull;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.firebase.Models.User;
+import com.example.firebase.R;
+import com.example.firebase.databinding.ActivityRegisterUserBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Objects;
-
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener{
+
+    private ActivityRegisterUserBinding binding;
 
     private EditText fullName_input, age_input, email_input, password_input, password_input_rewrite;
     private ProgressBar progressBar;
@@ -46,23 +43,22 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_user);
+        this.binding = ActivityRegisterUserBinding.inflate(getLayoutInflater());
+        View viewRoot = this.binding.getRoot();
+        setContentView(viewRoot);
 
-        mAuth = FirebaseAuth.getInstance();
+        this.mAuth = FirebaseAuth.getInstance();
 
-        TextView banner = findViewById(R.id.banner);
-        banner.setOnClickListener(this);
+        this.binding.banner.setOnClickListener(this);
+        this.binding.registerUser.setOnClickListener(this);
 
-        Button registerUser = findViewById(R.id.registerUser);
-        registerUser.setOnClickListener(this);
+        this.fullName_input = this.binding.fullNameInput;
+        this.age_input = this.binding.ageInput;
+        this.email_input = this.binding.emailInput;
+        this.password_input = this.binding.passwordInput;
+        this.password_input_rewrite= this.binding.passwordInputRewrite;
 
-        fullName_input = findViewById(R.id.fullName_input);
-        age_input = findViewById(R.id.age_input);
-        email_input = findViewById(R.id.email_input);
-        password_input = findViewById(R.id.password_input);
-        password_input_rewrite= findViewById(R.id.password_input_rewrite);
-
-        progressBar = findViewById(R.id.progressBar);
+        this.progressBar = this.binding.progressBar;
     }
 
     @SuppressLint("NonConstantResourceId")
