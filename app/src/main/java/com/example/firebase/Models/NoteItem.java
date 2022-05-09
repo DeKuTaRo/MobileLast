@@ -1,49 +1,39 @@
 package com.example.firebase.Models;
 
-public class NoteItem {
+import com.google.firebase.database.Exclude;
 
-    private String name, place, date, time;
+import java.io.Serializable;
 
+public class NoteItem implements Serializable {
+
+    @Exclude
+    private String id;
+
+    String label, textContent;
     public NoteItem() {
 
     }
 
-    public NoteItem(String name, String place, String date, String time) {
-        this.name = name;
-        this.place = place;
-        this.date = date;
-        this.time = time;
+    public NoteItem(String label, String textContent) {
+        this.label = label;
+        this.textContent = textContent;
     }
 
-    public String getName() {
-        return name;
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
+
+    public String getLabel() { return label; }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getTextContent() {
+        return textContent;
     }
 
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setTextContent(String textContent) {
+        this.textContent = textContent;
     }
 }
